@@ -46,6 +46,7 @@ Because the Tegra X1 CPU in the Nintendo Switch natively supports 32-bit ARM (AA
 - **Touchscreen & Controller Support:** The game is made for touch only. Touch works as on mobile; a controller plays it as a finger, with a cursor and swipes.
 - **Sound:** The game's music and effects (FMOD) played through the Switch's audio output.
 - **Movies:** The logos and the intro play (H.264, decoded by FFmpeg, LGPL). The wide movies fill the screen with the console held normally. A button or a touch skips them.
+- **Saves & HOME menu:** Progress is saved on the SD card; HOME and sleep pause and resume the game.
 - **Atmosphère & Sphaira Integration:** A dedicated launcher NRO registers a HOME menu forwarder icon.
 
 ---
