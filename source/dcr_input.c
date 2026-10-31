@@ -498,7 +498,8 @@ static void log_controllers(int active) {
  *   L, R             a swipe across, for the pages of a menu
  *   B, -             Android's Back key: the game's back and pause (Escape)
  *
- * Swipe directions: the finger moves against the stick, pulling the world. */
+ * Swipe directions: the finger moves with the stick: in the city a swipe walks
+ * the character that way. */
 /* The pad's fingers take the lowest pointer id free, as Android gives a new
  * finger: Unity makes its mouse (GetMouseButtonDown(0), which most of this
  * game reads) from pointer id 0 only (hardware 2026-10-30: taps with ids 8
@@ -647,7 +648,7 @@ static void pad_frame(void) {
   }
   const int pushed = dx || dy;
   if (pushed && !g_dir_held && !g_sw_left)
-    swipe_start(-dx, -dy); /* the finger against the stick: it pulls the world */
+    swipe_start(dx, dy);
   else if ((down & HidNpadButton_R) && !g_sw_left)
     swipe_start(-1, 0); /* the next page: the finger moves left */
   else if ((down & HidNpadButton_L) && !g_sw_left)

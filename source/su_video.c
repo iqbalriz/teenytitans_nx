@@ -640,7 +640,7 @@ static void draw(int vw, int vh) {
 static const GLenum k_caps[] = {GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST, GL_CULL_FACE, GL_BLEND, GL_DITHER};
 #define NCAPS (sizeof k_caps / sizeof k_caps[0])
 static struct {
-  GLint prog, active, tex[3], abuf, vao, fbo, rbo, vp[4], unpack;
+  GLint prog, active, tex[3], abuf, vao, draw_fbo, read_fbo, rbo, vp[4], unpack;
   GLfloat clear[4];
   GLboolean mask[4], caps[NCAPS];
 } S;
@@ -655,7 +655,8 @@ static void gl_save(void) {
   glActiveTexture((GLenum)S.active);
   glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &S.abuf);
   glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &S.vao);
-  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &S.fbo);
+  glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &S.draw_fbo);
+  glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &S.read_fbo);
   glGetIntegerv(GL_RENDERBUFFER_BINDING, &S.rbo);
   glGetIntegerv(GL_VIEWPORT, S.vp);
   glGetIntegerv(GL_UNPACK_ALIGNMENT, &S.unpack);
@@ -673,7 +674,10 @@ static void gl_restore(void) {
   glPixelStorei(GL_UNPACK_ALIGNMENT, S.unpack);
   glViewport(S.vp[0], S.vp[1], S.vp[2], S.vp[3]);
   glBindRenderbuffer(GL_RENDERBUFFER, (GLuint)S.rbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, (GLuint)S.fbo);
+  /* two bindings: Unity may be between a blit's source and its target, and
+   * with the read one lost every later blit reads the window (black) */
+  glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (GLuint)S.draw_fbo);
+  glBindFramebuffer(GL_READ_FRAMEBUFFER, (GLuint)S.read_fbo);
   glBindVertexArray((GLuint)S.vao);
   glBindBuffer(GL_ARRAY_BUFFER, (GLuint)S.abuf);
   for (int i = 0; i < 3; i++) {
